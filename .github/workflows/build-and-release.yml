@@ -24,19 +24,6 @@ jobs:
     - name: Zip output
       run: Compress-Archive -Path ./bin/Release -DestinationPath JonTestConsole.zip
 
-    - name: Create a release and upload asset
-      id: create-release-and-upload
-      uses: softprops/action-gh-release@v1
-      with:
-        files: ./JonTestConsole.zip
-        tag_name: v${{ steps.increment-version.outputs.version }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Get output url
-      id: get-output-url
-      run: echo "::set-output name=output_url::https://api.github.com/repos/${{ github.repository }}/releases/latest"
-      
     - name: Get latest release
       id: get-latest-release
       run: echo "::set-output name=version::$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name' | cut -c 2-)"
@@ -44,4 +31,14 @@ jobs:
     - name: Increment version
       id: increment-version
       run: echo "::set-output name=version::$((${{ steps.get-latest-release.outputs.version }} + 1))"
+
+    - name: Create a release and upload asset
+      id: create-release-and-upload
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./JonTestConsole.zip
+        tag_name: v${{ steps.increment-version.outputs.version }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+
   
