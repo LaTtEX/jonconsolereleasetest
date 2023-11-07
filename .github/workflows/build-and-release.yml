@@ -1,0 +1,47 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main # Change this to your default branch
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.x
+
+    - name: Build the solution
+      run: dotnet build -c Release
+
+    - name: Zip output
+      run: Compress-Archive -Path ./bin/Release -DestinationPath JonTestConsole.zip
+
+    - name: Upload to releases
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./JonTestConsole.zip
+        asset_name: JonTestConsole.zip
+        asset_content_type: application/zip
+
+  create-release:
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+    - name: Create a release
+      id: create-release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./JonTestConsole.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
