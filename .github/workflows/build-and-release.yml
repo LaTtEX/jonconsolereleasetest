@@ -26,9 +26,11 @@ jobs:
  
     - name: Create a release and upload asset
       id: create-release-and-upload
+      if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
         files: ./JonTestConsole.zip
+        tag_name: ${{ github.ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
   
