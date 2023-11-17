@@ -24,7 +24,7 @@ jobs:
     - name: Zip output
       run: Compress-Archive -Path ./bin/Release -DestinationPath JonTestConsole.zip
  
-    - name: Release the solution
+    - name: Release the zipped binary
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
