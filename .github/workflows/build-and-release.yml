@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    permissions: write-all
     runs-on: windows-latest
 
     steps:
@@ -22,7 +23,7 @@ jobs:
       run: dotnet build -c Release
 
     - name: Zip output
-      run: Compress-Archive -Path ./bin/Release -DestinationPath JonTestConsole.zip
+      run: Compress-Archive -Path ./bin/Release/.net7.0 -DestinationPath JonTestConsole.zip
  
     - name: Create Release
       id: create_release
@@ -43,6 +44,6 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./JonTestConsole.zip
-        asset_name: JonTestConsole.zip
+        asset_name: JonTestConsole-v${{ github.run_number }}.zip
         asset_content_type: application/zip
   
