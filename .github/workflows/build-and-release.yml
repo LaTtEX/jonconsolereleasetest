@@ -24,12 +24,11 @@ jobs:
     - name: Zip output
       run: Compress-Archive -Path ./bin/Release -DestinationPath JonTestConsole.zip
  
-    - name: Create a release and upload asset
-      id: create-release-and-upload
+    - name: Release
       uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
       with:
         files: ./JonTestConsole.zip
-        tag_name: ${{ github.ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
   
