@@ -23,7 +23,7 @@ jobs:
       run: dotnet build -c Release
 
     - name: Zip output
-      run: Compress-Archive -Path ./bin/Release -DestinationPath JonTestConsole.zip
+      run: Compress-Archive -Path ./bin/Release/net7.0/ -DestinationPath JonTestConsole.zip
  
     - name: Create Release
       id: create_release
